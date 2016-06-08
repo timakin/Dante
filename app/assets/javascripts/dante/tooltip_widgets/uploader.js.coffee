@@ -195,10 +195,11 @@ class Dante.View.TooltipWidget.Uploader extends Dante.View.TooltipWidget
         xhr
       cache: false
       contentType: false
+      dataType: "json"
 
       success: (response) =>
         response = @current_editor.upload_callback(response) if @current_editor.upload_callback
-        handleUp(response)
+        handleUp(response.data)
         return
       error: (jqxhr)=>
         utils.log("ERROR: got error uploading file #{jqxhr.responseText}")
@@ -232,12 +233,12 @@ class Dante.View.TooltipWidget.Uploader extends Dante.View.TooltipWidget
   ###
   handleBackspaceKey: (e, node) =>
     utils.log "handleBackspaceKey on uploader widget"
-   
+
     # remove graf figure if is selected but not in range (not focus on caption)
     if $(node).hasClass("is-selected") && $(node).hasClass("graf--figure")
       # exit if selection is on caption
       anchor_node = @current_editor.selection().anchorNode
-      
+
       # return false unless backspace is in the first char
       if ( anchor_node? && $(anchor_node.parentNode).hasClass("imageCaption"))
         if @current_editor.isFirstChar()
